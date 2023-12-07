@@ -1,0 +1,94 @@
+;[Include:kx33.txt]
+
+;; Billing
+
+
+
+
+[#Form: Comprehensive invoice]
+
+ [#Part: EXPINV OpPageBreak]
+
+        Parts       : EXPINV Title, EXPINV Leading, EXPINV Column
+		
+[#Part:EXPINV Title]
+[#Part: Expinv QRInfo Title]
+	[#Part:eInvoice PrintExp QRC]
+		Invisible:Yes
+			
+[#Part: eInvoice QRC Details]
+		Invisible:Yes
+		
+[#Part: eInv IRN Details]
+	Invisible:Yes
+	
+
+[#Part:EXPINV Leading]
+	[#Part:EXPINV TopRight]
+		Parts       : EXPINV BasicInfo, EXPINV Terms, JMInOutInv NatureofProcess
+		Add:Part:After:EXPINV BasicInfo:IRN_part
+		Add:Part:After:IRN_part:qr_ack_part
+	[#Part:EXPINV BasicInfo]
+		Parts       : EXPINV BasicLeft, EXPINV BasicRight
+[#Part:EXPINV BasicLeft]
+	
+Parts: EXPINV Number, EXPINV DelNote, EXPINV SupplierRef, EXPINV OrderNumber,  JWMTIn ChallanNo, EXPINV ShipDoc, EXPINV PreCarr, EXPINV Vessel, EXPINV PortLoading, JMInOutInv EmptyPart
+[#Part:EXPINV SupplierRef]
+Invisible:Yes
+[#Part:EXPINV BasicRight]
+Parts       : EXPINV Date, EXPINV DueDate, EXPINV OtherRef, EXPINV OrderDate, +
+               EXPINV ShipDate, EXPINV Destination, JWInOutInv MotorVehicleNo, +
+			EXPINV PlaceOfRcpt, EXPINV PortDischarge, JMInOutInv ProcessingDuration
+[#Part:EXPINV OtherRef]
+Invisible:Yes
+
+[Part:IRN_part]
+	Add:Line:IRN_Line
+	Border:Thin Column Titles
+	[Line: IRN_Line]
+		
+		Use			: eInv IRN Details Template
+		Local		: Field		: Medium Prompt	: Width		: 5			
+		Local		: Field		: Medium Prompt	: Style		: Small
+		Local		: Field		: Name Field	: Style		: Small Bold
+
+		Local		: Field		: Medium Prompt	: Set as	: $$LocaleString:"IRN"
+		Local		: Field		: Name Field	: Set as	: @@GSTeInvIRN
+		Local		: Field		: Name Field	: Width		: 3 Inch
+		Local		: Field		: Name Field	: Line		: 0	
+[Part:qr_ack_part]
+	Add:Left Part:ack_part
+	Add:Right Part:qr_part
+	[Part:ack_part]
+		Add:Line:Ack_Line
+Add:Line:After:Ack_Line:Ack_date
+Add:Line:After:Ack_date:qr_title1
+[Line: Ack_Line]
+			
+		Use			: eInv IRN Details Template
+		Local		: Field		: Medium Prompt	: Set as	: $$LocaleString:"Ack No."
+		Local		: Field		: Name Field	: Set as	: If ##IseInvPSPrintAfterSave Then ##eInvPSAckNo Else $IRNAckNo
+
+[Line:Ack_date]			
+			Use			: eInv IRN Details Template
+		Local		: Field		: Medium Prompt	: Set as	: $$LocaleString:"Ack Date"
+		Local		: Field		: Name Field	: Set as	: If ##IseInvPSPrintAfterSave Then $$String:##eInvPSAckDate Else $$String:$IRNAckDate
+	
+[Line:qr_title1]	
+	Space Top:0.3 Inch
+	Field:Name Field
+		Local		: Field		: Name Field	: Set as	:"e-invoice"
+		Local		: Field		: Name Field	: Align	: Right
+[Part:qr_part]
+	Add:Line:qr_title1
+	QRCode		: @@eInvoiceQRCValue : Yes
+		Line		: eInvoice QRC Details
+		Width		: 0.8 Inch
+		Height		: 0.8 Inch
+	
+			
+
+[#Part: EXPINV Terms]
+					Invisible:Yes
+					
+

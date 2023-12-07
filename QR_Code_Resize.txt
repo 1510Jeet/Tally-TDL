@@ -1,0 +1,25 @@
+;[Include:kx33.txt]
+
+
+
+[#Form: Comprehensive invoice]
+
+ [#Part: EXPINV OpPageBreak]
+
+        Parts       : EXPINV Title, EXPINV Leading, EXPINV Column
+		
+[#Part:EXPINV Title]
+;	Print BG:blue
+[#Part: Expinv QRInfo Title]
+			;Print BG:blue
+			Part		: Expinv Title Info, eInvoice PrintExp QRC
+			Vertical	: No
+[#Part: eInvoice QRC Details]
+		
+		QRCode		: @@eInvoiceQRCValue : Yes
+		Line		: eInvoice QRC Details
+		Width		: 0.8 Inch;@@eInvoiceQRCWidth Inch
+		Height		: 0.8 Inch;@@eInvoiceQRCHeight Inch			
+
+	
+	
